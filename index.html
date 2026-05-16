@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power BI Portfolio — Senior BI Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --surface: #0f1521;
+    --surface2: #161e2e;
+    --border: rgba(255,255,255,0.07);
+    --accent: #f5a623;
+    --accent2: #38bdf8;
+    --accent3: #a78bfa;
+    --text: #f0f4ff;
+    --muted: #8896a8;
+    --faint: #2a3447;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(7,9,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 2.5rem 5rem;
+    overflow: hidden;
+  }
+
+  /* Decorative grid lines */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+    top: 10%; left: -10%;
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%);
+    bottom: 10%; right: 5%;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 30px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero h1 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover {
+    background: #ffbb3d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245,166,35,0.35);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 2rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    padding: 0;
+  }
+
+  .stats-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stat-item {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.5s ease;
+  }
+
+  .stat-item:hover::before { width: 100%; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 60px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 540px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ─── SKILLS ─── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-card {
+    background: var(--surface);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .skill-card:hover { background: var(--surface2); }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--accent);
+    transition: height 0.3s ease;
+  }
+
+  .skill-card:hover::before { height: 100%; }
+
+  .skill-icon {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .skill-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .skill-card p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--faint);
+    color: var(--accent2);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── PROJECTS ─── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--border);
+  }
+
+  .project-card {
+    background: var(--surface);
+    overflow: hidden;
+    position: relative;
+    transition: background 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-card:hover { background: var(--surface2); }
+
+  .project-preview {
+    position: relative;
+    padding-bottom: 56.25%;
+    background: var(--faint);
+    overflow: hidden;
+  }
+
+  .project-preview iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    pointer-events: none;
+    transform: scale(1.02);
+  }
+
+  .project-preview-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 60%, var(--surface) 100%);
+    z-index: 1;
+  }
+
+  .project-badge {
+    position: absolute;
+    top: 1rem; right: 1rem;
+    z-index: 2;
+    background: var(--accent);
+    color: #0a0a0a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .project-body {
+    padding: 1.8rem 2rem 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .project-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .project-card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    margin-bottom: 1.4rem;
+    flex: 1;
+  }
+
+  .project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tech-pill {
+    font-size: 0.72rem;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--faint);
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: gap 0.2s;
+  }
+
+  .project-link:hover { gap: 0.7rem; }
+
+  /* ─── TECH STACK MARQUEE ─── */
+  .marquee-section {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .marquee-item::before {
+    content: '◆';
+    color: var(--accent);
+    font-size: 0.5rem;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── ABOUT / MATCH ─── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    line-height: 1.2;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  .match-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .match-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    transition: border-color 0.2s;
+  }
+
+  .match-item:hover { border-left-color: var(--accent2); }
+
+  .match-icon { font-size: 1.2rem; flex-shrink: 0; }
+
+  .match-content h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .match-content p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─── CONTACT ─── */
+  .contact-section {
+    position: relative;
+    z-index: 1;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 5rem 2.5rem;
+    text-align: center;
+  }
+
+  .contact-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .contact-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .contact-section p {
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fadeUp 0.7s ease forwards;
+    opacity: 0;
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.1s; }
+  .fade-up:nth-child(2) { animation-delay: 0.25s; }
+  .fade-up:nth-child(3) { animation-delay: 0.4s; }
+  .fade-up:nth-child(4) { animation-delay: 0.55s; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .projects-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.2rem; }
+  }
+
+  @media (max-width: 600px) {
+    .stats-inner { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">// BI Portfolio</div>
+  <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow fade-up">Senior Power BI Developer</div>
+    <h1 class="fade-up">
+      Turning Data
+      <span>Into Decisions.</span>
+    </h1>
+    <p class="hero-desc fade-up">
+      Specializing in enterprise-grade BI solutions — financial dashboards, geospatial analytics, and scalable data models built on the Azure ecosystem.
+    </p>
+    <div class="hero-cta fade-up">
+      <a href="#projects" class="btn-primary">View Projects ↓</a>
+      <a href="#contact" class="btn-outline">Get In Touch</a>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-num">2+</div>
+      <div class="stat-label">Live Dashboards</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">DAX</div>
+      <div class="stat-label">Advanced Modeling</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">Azure</div>
+      <div class="stat-label">Ecosystem Native</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">SQL</div>
+      <div class="stat-label">Query Optimization</div>
+    </div>
+  </div>
+</div>
+
+<!-- TECH MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Power BI Desktop</span>
+    <span class="marquee-item">DAX</span>
+    <span class="marquee-item">Power Query / M</span>
+    <span class="marquee-item">Azure SQL</span>
+    <span class="marquee-item">Azure DevOps</span>
+    <span class="marquee-item">Power BI Embedded</span>
+    <span class="marquee-item">SQL Server</span>
+    <span class="marquee-item">Data Modeling</span>
+    <span class="marquee-item">Star Schema</span>
+    <span class="marquee-item">KPI Dashboards</span>
+    <span class="marquee-item">Geospatial Analytics</span>
+    <span class="marquee-item">Power BI Desktop</span>
+    <span class="marquee-item">DAX</span>
+    <span class="marquee-item">Power Query / M</span>
+    <span class="marquee-item">Azure SQL</span>
+    <span class="marquee-item">Azure DevOps</span>
+    <span class="marquee-item">Power BI Embedded</span>
+    <span class="marquee-item">SQL Server</span>
+    <span class="marquee-item">Data Modeling</span>
+    <span class="marquee-item">Star Schema</span>
+    <span class="marquee-item">KPI Dashboards</span>
+    <span class="marquee-item">Geospatial Analytics</span>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Featured Work</div>
+  <h2 class="section-title">Power BI Dashboards</h2>
+  <p class="section-sub">Interactive reports built with advanced DAX measures, optimized data models, and stakeholder-focused visual storytelling.</p>
+
+  <div class="projects-grid">
+
+    <!-- Project 1: COVID-19 -->
+    <div class="project-card">
+      <div class="project-preview">
+        <iframe
+          src="https://app.powerbi.com/view?r=eyJrIjoiZjdlZDg2NjMtOTUwMi00YTVmLWI0ZGItODA3ZWZhZmU0NTg5IiwidCI6ImQyZWJiZDRjLWRlOTUtNDExOS05NGViLTMzZWEwM2UyNWZmMiIsImMiOjEwfQ%3D%3D"
+          allowFullScreen="true">
+        </iframe>
+        <div class="project-preview-overlay"></div>
+        <div class="project-badge">Live Report</div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Global Analytics · Time-series</div>
+        <h3>COVID-19 Global Impact Dashboard</h3>
+        <p>An executive-level dashboard tracking global pandemic trends — confirmed cases, fatality rates, and recovery metrics across 180+ countries. Demonstrates advanced KPI card design, time-intelligence DAX measures, and dynamic cross-filtering for multi-dimensional analysis.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="tech-pill">DAX</span>
+            <span class="tech-pill">Time Intelligence</span>
+            <span class="tech-pill">Power Query</span>
+            <span class="tech-pill">Maps</span>
+          </div>
+          <a href="https://app.powerbi.com/view?r=eyJrIjoiZjdlZDg2NjMtOTUwMi00YTVmLWI0ZGItODA3ZWZhZmU0NTg5IiwidCI6ImQyZWJiZDRjLWRlOTUtNDExOS05NGViLTMzZWEwM2UyNWZmMiIsImMiOjEwfQ%3D%3D" target="_blank" class="project-link">View Live →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project 2: Seattle Permits -->
+    <div class="project-card">
+      <div class="project-preview">
+        <iframe
+          src="https://app.powerbi.com/view?r=eyJrIjoiNWY0MTBjNjgtOGU1YS00OGZjLTgyODQtZjE0YmRiZmUxZTg2IiwidCI6ImQyZWJiZDRjLWRlOTUtNDExOS05NGViLTMzZWEwM2UyNWZmMiIsImMiOjEwfQ%3D%3D"
+          allowFullScreen="true">
+        </iframe>
+        <div class="project-preview-overlay"></div>
+        <div class="project-badge">Live Report</div>
+      </div>
+      <div class="project-body">
+        <div class="project-meta">Real Estate · Geospatial</div>
+        <h3>Seattle Building Permits Analysis</h3>
+        <p>A deep-dive into Seattle's real estate development landscape — permit volumes, construction types, neighborhood-level geospatial breakdowns, and approval timelines. Directly mirrors real-world BI challenges in asset utilization and property management reporting.</p>
+        <div class="project-footer">
+          <div class="project-tech">
+            <span class="tech-pill">Geospatial</span>
+            <span class="tech-pill">DAX</span>
+            <span class="tech-pill">Real Estate</span>
+            <span class="tech-pill">Drillthrough</span>
+          </div>
+          <a href="https://app.powerbi.com/view?r=eyJrIjoiNWY0MTBjNjgtOGU1YS00OGZjLTgyODQtZjE0YmRiZmUxZTg2IiwidCI6ImQyZWJiZDRjLWRlOTUtNDExOS05NGViLTMzZWEwM2UyNWZmMiIsImMiOjEwfQ%3D%3D" target="_blank" class="project-link">View Live →</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="background: none; padding-top: 0;">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title">Technical Stack</h2>
+  <p class="section-sub">End-to-end BI development — from raw data extraction to polished, embedded dashboards.</p>
+
+  <div class="skills-grid">
+    <div class="skill-card">
+      <span class="skill-icon">📊</span>
+      <h3>Power BI Development</h3>
+      <p>Advanced report design, custom visuals, drillthrough, bookmarks, and row-level security. Experience with Power BI Embedded for app integration.</p>
+      <div class="skill-tags">
+        <span class="tag">Power BI Desktop</span>
+        <span class="tag">Power BI Service</span>
+        <span class="tag">Embedded</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">⚙️</span>
+      <h3>DAX & Data Modeling</h3>
+      <p>Complex DAX measures for financial KPIs, time-intelligence calculations, and optimized star/snowflake schema design for performance at scale.</p>
+      <div class="skill-tags">
+        <span class="tag">DAX</span>
+        <span class="tag">Star Schema</span>
+        <span class="tag">Calculated Columns</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🗄️</span>
+      <h3>SQL & Data Extraction</h3>
+      <p>Query optimization, CTEs, window functions, and stored procedures. Experience extracting from Azure SQL Data Warehouse in Import mode for large datasets.</p>
+      <div class="skill-tags">
+        <span class="tag">Azure SQL</span>
+        <span class="tag">T-SQL</span>
+        <span class="tag">Query Optimization</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">☁️</span>
+      <h3>Azure Ecosystem</h3>
+      <p>Working within the Azure stack — Azure SQL, data pipelines, and Azure DevOps for version control and CI/CD delivery of BI assets.</p>
+      <div class="skill-tags">
+        <span class="tag">Azure DevOps</span>
+        <span class="tag">Azure SQL DW</span>
+        <span class="tag">Data Pipelines</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🗺️</span>
+      <h3>Geospatial Analytics</h3>
+      <p>Mapping property data, visualizing geographic distributions of assets, and building location-aware insights for real estate and operational reporting.</p>
+      <div class="skill-tags">
+        <span class="tag">Shape Maps</span>
+        <span class="tag">ArcGIS</span>
+        <span class="tag">Location Data</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">💰</span>
+      <h3>Financial & ESG Reporting</h3>
+      <p>Building financial performance dashboards, operational cost tracking, maintenance cost analysis, and sustainability/ESG metrics for property management.</p>
+      <div class="skill-tags">
+        <span class="tag">P&amp;L Reports</span>
+        <span class="tag">ESG Metrics</span>
+        <span class="tag">KPI Scorecards</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / JD MATCH -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-text">
+      <div class="section-label">About</div>
+      <h2>Built for Real Estate BI</h2>
+      <p>
+        With hands-on experience in geospatial analytics and property data — as demonstrated in the Seattle Building Permits project — I understand the unique data challenges of real estate and property management domains.
+      </p>
+      <p>
+        I design dashboards that serve real stakeholders: concise KPIs for executives, detailed drilldowns for analysts, and scalable models that hold up as data volumes grow.
+      </p>
+      <p>
+        Comfortable working independently in a remote setup and collaborating across business and technical teams to translate requirements into reporting solutions that drive decisions.
+      </p>
+    </div>
+    <div>
+      <div class="section-label">Role Alignment</div>
+      <ul class="match-list">
+        <li class="match-item">
+          <span class="match-icon">✅</span>
+          <div class="match-content">
+            <h4>Financial & Operational Dashboards</h4>
+            <p>Proven track record designing KPI-centric reports for cross-functional stakeholders.</p>
+          </div>
+        </li>
+        <li class="match-item">
+          <span class="match-icon">✅</span>
+          <div class="match-content">
+            <h4>Real Estate & Geospatial Insights</h4>
+            <p>Seattle Permits project directly demonstrates property-level spatial analysis.</p>
+          </div>
+        </li>
+        <li class="match-item">
+          <span class="match-icon">✅</span>
+          <div class="match-content">
+            <h4>Azure SQL + Import Mode</h4>
+            <p>Experience extracting and transforming data from Azure SQL DW at scale.</p>
+          </div>
+        </li>
+        <li class="match-item">
+          <span class="match-icon">✅</span>
+          <div class="match-content">
+            <h4>Power BI Embedded</h4>
+            <p>Familiar with embedding reports into web applications via REST API and JavaScript SDK.</p>
+          </div>
+        </li>
+        <li class="match-item">
+          <span class="match-icon">✅</span>
+          <div class="match-content">
+            <h4>Azure DevOps & Version Control</h4>
+            <p>Using Git-based workflows for BI asset management and team delivery.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <h2>Let's Work Together</h2>
+    <p>Open to Senior Power BI Developer roles. Available for remote collaboration across time zones.</p>
+    <div class="contact-links">
+      <a href="mailto:your.email@example.com" class="btn-primary">✉ your.email@example.com</a>
+      <a href="https://linkedin.com/in/yourprofile" target="_blank" class="btn-outline">LinkedIn →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span>// Power BI Portfolio</span>
+  <span>Built for data-driven decision making</span>
+</footer>
+
+</body>
+</html>
